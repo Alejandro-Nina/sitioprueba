@@ -11,14 +11,14 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e3f2fd;
+            background-color: #f3f4f6;
         }
         header {
-            background-color: #0d47a1;
+            background-color: #3f51b5;
             color: white;
             padding: 20px;
             text-align: center;
-            border-bottom: 5px solid #0b3c71;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         header h1 {
             margin: 0;
@@ -29,31 +29,28 @@
             text-align: center;
         }
         nav a {
-            margin: 0 10px;
-            color: #0d47a1;
+            margin: 0 15px;
+            color: #3f51b5;
             text-decoration: none;
             font-weight: bold;
-            padding: 10px;
-            border: 2px solid #0d47a1;
+            padding: 10px 15px;
             border-radius: 5px;
             transition: background-color 0.3s;
-            display: inline-block;
         }
         nav a:hover {
-            background-color: #0d47a1;
-            color: white;
+            background-color: #e3f2fd;
         }
         .container {
-            max-width: 90%;
+            max-width: 80%;
             margin: 20px auto;
             padding: 20px;
             background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         h2 {
-            color: #0d47a1;
-            border-bottom: 2px solid #0d47a1;
+            color: #3f51b5;
+            border-bottom: 2px solid #3f51b5;
             padding-bottom: 10px;
         }
         h3 {
@@ -65,15 +62,15 @@
         }
         ul li {
             margin: 10px 0;
-            padding: 10px;
-            background-color: #e1f5fe;
-            border-left: 4px solid #0d47a1;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-left: 4px solid #3f51b5;
             border-radius: 5px;
         }
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #333;
+            background-color: #3f51b5;
             color: white;
             position: relative;
             bottom: 0;
@@ -87,7 +84,7 @@
         }
         .pdf-container {
             margin: 20px 0;
-            border: 1px solid #0d47a1;
+            border: 1px solid #3f51b5;
             border-radius: 5px;
             overflow: hidden;
         }
@@ -123,14 +120,13 @@
 <div class="container">
     <section id="tension-simple">
         <h2>Tensión Simple</h2>
-        <p>La tensión simple es el esfuerzo que se produce en un material cuando se le aplica una carga axial. Es importante para el diseño de estructuras, ya que permite conocer la resistencia de los materiales.</p>
+        <p>La tensión simple es el esfuerzo que se produce en un material cuando se le aplica una carga axial. Es fundamental para el diseño de estructuras, ya que permite conocer la resistencia de los materiales.</p>
         <p><strong>Definición:</strong> La tensión se define como la fuerza que actúa sobre una unidad de área.</p>
         <p><strong>Fórmula:</strong> <code>σ = F / A</code> (donde σ es la tensión, F es la fuerza aplicada y A es el área).</p>
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Stress-Stress_curve.png" alt="Curva de Tensión">
-        <p>El gráfico de la tensión contra la deformación muestra cómo un material se comporta bajo carga, incluyendo la zona elástica y la zona plástica.</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_1.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_TENSION.pdf"></iframe>
         </div>
         <div class="video-container">
             <h3>Video sobre Tensión Simple</h3>
@@ -150,7 +146,7 @@
         <p><strong>Fórmula:</strong> <code>ε = ΔL / L₀</code> (donde ε es la deformación, ΔL es el cambio en longitud y L₀ es la longitud original).</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_2.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_DEFORMACION.pdf"></iframe>
         </div>
         <div class="video-container">
             <h3>Video sobre Deformación Simple</h3>
@@ -166,7 +162,7 @@
         <p>La combinación de esfuerzos se puede analizar mediante el círculo de Mohr, que permite visualizar los esfuerzos principales y de corte.</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_3.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_ESFUERZOS_COMBINADOS.pdf"></iframe>
         </div>
         <div class="video-container">
             <h3>Video sobre Esfuerzos Combinados</h3>
@@ -181,7 +177,7 @@
         <p><strong>Fórmula para la deformación máxima:</strong> <code>δ = (PL³) / (48EI)</code> (donde P es la carga, L es la longitud de la viga, E es el módulo de elasticidad y I es el momento de inercia).</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_4.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_VIGAS.pdf"></iframe>
         </div>
         <div class="video-container">
             <h3>Video sobre Deformación en Vigas</h3>
