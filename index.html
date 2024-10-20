@@ -8,20 +8,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e9f5ff;
+            background-color: #e3f2fd;
         }
         header {
-            background-color: #007bff;
+            background-color: #0d47a1;
             color: white;
             padding: 20px;
             text-align: center;
-            border-bottom: 5px solid #0056b3;
+            border-bottom: 5px solid #0b3c71;
         }
         header h1 {
             margin: 0;
+            font-size: 2.5em;
         }
         nav {
             margin: 20px 0;
@@ -29,33 +30,33 @@
         }
         nav a {
             margin: 0 15px;
-            color: #007bff;
+            color: #0d47a1;
             text-decoration: none;
             font-weight: bold;
             padding: 10px;
-            border: 2px solid #007bff;
+            border: 2px solid #0d47a1;
             border-radius: 5px;
             transition: background-color 0.3s;
         }
         nav a:hover {
-            background-color: #007bff;
+            background-color: #0d47a1;
             color: white;
         }
         .container {
             max-width: 900px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
+            color: #0d47a1;
+            border-bottom: 2px solid #0d47a1;
             padding-bottom: 10px;
         }
         h3 {
-            color: #0056b3;
+            color: #1976d2;
         }
         ul {
             list-style-type: none;
@@ -64,8 +65,8 @@
         ul li {
             margin: 10px 0;
             padding: 10px;
-            background-color: #e0f7fa;
-            border-left: 4px solid #007bff;
+            background-color: #e1f5fe;
+            border-left: 4px solid #0d47a1;
             border-radius: 5px;
         }
         footer {
@@ -85,7 +86,7 @@
         }
         .pdf-container {
             margin: 20px 0;
-            border: 1px solid #007bff;
+            border: 1px solid #0d47a1;
             border-radius: 5px;
             overflow: hidden;
         }
@@ -93,6 +94,15 @@
             width: 100%;
             height: 500px;
             border: none;
+        }
+        .video-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .video-container iframe {
+            width: 80%;
+            height: 400px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -112,13 +122,17 @@
 <div class="container">
     <section id="tension-simple">
         <h2>Tensión Simple</h2>
-        <p>La tensión simple es la fuerza aplicada a través de una sección transversal de un material. Se mide en Pascales (Pa) y es crucial en el análisis de estructuras.</p>
+        <p>La tensión simple es una medida de la fuerza que se aplica a través de una sección transversal de un material. Se expresa en Pascales (Pa).</p>
         <p><strong>Fórmula:</strong> <code>σ = F / A</code> (donde σ es la tensión, F es la fuerza aplicada y A es el área).</p>
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Stress-Stress_curve.png" alt="Curva de Tensión">
-        <p>La relación entre tensión y deformación se representa en la curva de tensión-deformación, que muestra cómo un material responde a la carga.</p>
+        <p>La relación entre la tensión y la deformación es fundamental en el análisis estructural.</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_1.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_TENSION.pdf"></iframe>
+        </div>
+        <div class="video-container">
+            <h3>Video sobre Tensión Simple</h3>
+            <iframe src="https://www.youtube.com/embed/7fPp4QyT1T4" frameborder="0" allowfullscreen></iframe>
         </div>
     </section>
 
@@ -126,38 +140,48 @@
         <h2>Deformación Simple</h2>
         <p>La deformación se refiere al cambio de longitud de un material bajo carga. Se clasifica en:</p>
         <ul>
-            <li><strong>Deformación Elástica:</strong> Recuperable una vez que se elimina la carga.</li>
-            <li><strong>Deformación Plástica:</strong> Permanente después de la eliminación de la carga.</li>
+            <li><strong>Deformación Elástica:</strong> Recuperable al eliminar la carga.</li>
+            <li><strong>Deformación Plástica:</strong> Permanente después de la carga.</li>
         </ul>
         <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Strain.png" alt="Deformación">
-        <p>La deformación se calcula utilizando la siguiente fórmula:</p>
         <p><strong>Fórmula:</strong> <code>ε = ΔL / L₀</code> (donde ε es la deformación, ΔL es el cambio en longitud y L₀ es la longitud original).</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_2.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_DEFORMACION.pdf"></iframe>
+        </div>
+        <div class="video-container">
+            <h3>Video sobre Deformación Simple</h3>
+            <iframe src="https://www.youtube.com/embed/F7fRmxQ1Pq8" frameborder="0" allowfullscreen></iframe>
         </div>
     </section>
 
     <section id="esfuerzos-combinados">
         <h2>Esfuerzos Combinados</h2>
-        <p>Los esfuerzos combinados se producen cuando se aplican diferentes tipos de carga sobre un material. Esto puede incluir tensión, compresión y torsión.</p>
+        <p>Los esfuerzos combinados se producen cuando diferentes tipos de carga se aplican a un material, como tensión, compresión y torsión.</p>
         <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Combined_Stresses.png" alt="Esfuerzos Combinados">
-        <p>Para el análisis de estos esfuerzos, se puede utilizar el criterio de von Mises y el círculo de Mohr.</p>
+        <p>El análisis de estos esfuerzos se realiza mediante el criterio de von Mises y el círculo de Mohr.</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_3.pdf.pdf"></iframe>
+            <iframe src="EJERCICIO_ESFUERZOS_COMBINADOS.pdf"></iframe>
+        </div>
+        <div class="video-container">
+            <h3>Video sobre Esfuerzos Combinados</h3>
+            <iframe src="https://www.youtube.com/embed/j5hFrD3YBSU" frameborder="0" allowfullscreen></iframe>
         </div>
     </section>
 
     <section id="deformacion-vigas">
         <h2>Deformación en Vigas</h2>
-        <p>La deformación en vigas se refiere al cambio de forma que experimenta una viga bajo carga. Se analiza comúnmente mediante la teoría de Euler-Bernoulli.</p>
+        <p>La deformación en vigas se refiere al cambio de forma que experimenta una viga bajo carga, y se analiza mediante la teoría de Euler-Bernoulli.</p>
         <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Beam_deflection.gif" alt="Deformación en Vigas">
-        <p>La fórmula para calcular la deflexión máxima en una viga simplemente apoyada es:</p>
         <p><strong>Fórmula:</strong> <code>δ = (PL³) / (48EI)</code> (donde P es la carga, L es la longitud de la viga, E es el módulo de elasticidad, e I es el momento de inercia).</p>
         <div class="pdf-container">
             <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_4.pdf"></iframe>
+            <iframe src="EJERCICIO_VIGAS.pdf"></iframe>
+        </div>
+        <div class="video-container">
+            <h3>Video sobre Deformación en Vigas</h3>
+            <iframe src="https://www.youtube.com/embed/ZjC4gW3Yd0E" frameborder="0" allowfullscreen></iframe>
         </div>
     </section>
 </div>
