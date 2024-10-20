@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Resistencia de Materiales</title>
+    <title>Bienvenido - Resistencia de Materiales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -19,25 +19,8 @@
             padding: 20px;
             text-align: center;
         }
-        header h1 {
-            margin: 0;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
-        nav a {
-            color: white;
-            padding: 15px;
-            text-decoration: none;
-            text-align: center;
-        }
-        nav a:hover {
-            background-color: #575757;
-        }
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background-color: #ffffff;
@@ -47,138 +30,37 @@
         h2 {
             color: #4a90e2;
         }
-        h3 {
-            color: #333;
-        }
-        p {
-            line-height: 1.6;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
+        a {
+            display: inline-block;
             margin: 10px 0;
-        }
-        .pdf-container {
-            margin: 20px 0;
-            border: 1px solid #4a90e2;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-        }
-        .video-container {
-            margin: 20px 0;
+            padding: 15px;
             text-align: center;
+            text-decoration: none;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #575757;
         }
         footer {
             text-align: center;
             padding: 20px;
             background-color: #4a90e2;
             color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-        .welcome {
-            background-color: #4a90e2;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 1.2em;
-            margin: 20px 0;
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Curso de Resistencia de Materiales</h1>
+    <h1>Bienvenido a Resistencia de Materiales</h1>
 </header>
 
-<div class="welcome">
-    <p>¡Bienvenidos! Aquí aprenderás sobre los fundamentos de la resistencia de materiales.</p>
-</div>
-
-<nav>
-    <a href="#tension-simple">Tensión Simple</a>
-    <a href="#deformacion-simple">Deformación Simple</a>
-    <a href="#esfuerzos-combinados">Esfuerzos Combinados</a>
-    <a href="#deformacion-vigas">Deformación en Vigas</a>
-</nav>
-
 <div class="container">
-    <section id="tension-simple">
-        <h2>Tensión Simple</h2>
-        <p>La tensión simple se produce cuando una fuerza actúa sobre un área determinada de un material. Es un concepto fundamental en ingeniería civil, ya que permite calcular la resistencia y el comportamiento de los materiales bajo cargas.</p>
-        <p><strong>Definición:</strong> La tensión se expresa como la fuerza aplicada por unidad de área.</p>
-        <p><strong>Fórmula:</strong> <code>σ = F / A</code> (donde σ es la tensión, F es la fuerza aplicada y A es el área).</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Stress-Stress_curve.png" alt="Curva de Tensión">
-        <div class="pdf-container">
-            <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_1.pdf.pdf"></iframe>
-        </div>
-        <div class="video-container">
-            <h3>Video sobre Tensión Simple</h3>
-            <iframe src="https://www.youtube.com/embed/7fPp4QyT1T4" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </section>
-
-    <section id="deformacion-simple">
-        <h2>Deformación Simple</h2>
-        <p>La deformación es el cambio dimensional que experimenta un material cuando se le aplica una carga. Este cambio puede ser temporal o permanente, y se clasifica en dos tipos: elástica y plástica.</p>
-        <p><strong>Tipos de Deformación:</strong></p>
-        <ul>
-            <li><strong>Deformación Elástica:</strong> Es recuperable. El material vuelve a su forma original al retirar la carga.</li>
-            <li><strong>Deformación Plástica:</strong> Es permanente. El material no vuelve a su forma original tras la carga.</li>
-        </ul>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Strain.png" alt="Deformación">
-        <p><strong>Fórmula:</strong> <code>ε = ΔL / L₀</code> (donde ε es la deformación, ΔL es el cambio en longitud y L₀ es la longitud original).</p>
-        <div class="pdf-container">
-            <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_2.pdf.pdf"></iframe>
-        </div>
-        <div class="video-container">
-            <h3>Video sobre Deformación Simple</h3>
-            <iframe src="https://www.youtube.com/embed/F7fRmxQ1Pq8" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </section>
-
-    <section id="esfuerzos-combinados">
-        <h2>Esfuerzos Combinados</h2>
-        <p>Los esfuerzos combinados ocurren cuando un material está sometido a múltiples cargas simultáneamente, como tensión y compresión. Es crucial en el diseño de estructuras complejas.</p>
-        <p>El análisis de esfuerzos combinados se puede realizar utilizando el círculo de Mohr, que permite determinar los esfuerzos principales y de corte en el material.</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Combined_Stresses.png" alt="Esfuerzos Combinados">
-        <p><strong>Ejemplo:</strong> Calcular los esfuerzos en una viga que soporta una carga puntual y una carga distribuida.</p>
-        <div class="pdf-container">
-            <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_3.pdf.pdf"></iframe>
-        </div>
-        <div class="video-container">
-            <h3>Video sobre Esfuerzos Combinados</h3>
-            <iframe src="https://www.youtube.com/embed/j5hFrD3YBSU" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </section>
-
-    <section id="deformacion-vigas">
-        <h2>Deformación en Vigas</h2>
-        <p>Las vigas son componentes estructurales que soportan cargas y experimentan deformaciones bajo flexión. El análisis de la deformación en vigas es esencial para garantizar la seguridad y funcionalidad de las estructuras.</p>
-        <p>La deformación máxima de una viga se puede calcular utilizando la fórmula de Euler-Bernoulli.</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Beam_deflection.gif" alt="Deformación en Vigas">
-        <p><strong>Fórmula para la deformación máxima:</strong> <code>δ = (PL³) / (48EI)</code> (donde P es la carga, L es la longitud de la viga, E es el módulo de elasticidad y I es el momento de inercia).</p>
-        <div class="pdf-container">
-            <h3>Ejemplo Práctico</h3>
-            <iframe src="EJERCICIO_4.pdf.pdf"></iframe>
-        </div>
-        <div class="video-container">
-            <h3>Video sobre Deformación en Vigas</h3>
-            <iframe src="https://www.youtube.com/embed/QE0IYBdo-rg" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </section>
+    <h2>Explora el Contenido</h2>
+    <a href="temario.html">Ir al Temario</a>
 </div>
 
 <footer>
