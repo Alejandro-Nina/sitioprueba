@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Bienvenido - Resistencia de Materiales</title>
+    <title>Resistencia de Materiales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -50,6 +50,17 @@
             background-color: #4a90e2;
             color: white;
         }
+        .pdf-container {
+            margin: 20px 0;
+            border: 1px solid #4a90e2;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -60,7 +71,59 @@
 
 <div class="container">
     <h2>Explora el Contenido</h2>
-    <a href="temario.html">Ir al Temario</a>
+    <a href="#temario">Ir al Temario</a>
+</div>
+
+<div class="container" id="temario">
+    <h2>Temario - Resistencia de Materiales</h2>
+    <a href="#tension-simple">Tensión Simple</a>
+    <a href="#deformacion-simple">Deformación Simple</a>
+    <a href="#esfuerzos-combinados">Esfuerzos Combinados</a>
+    <a href="#deformacion-vigas">Deformación en Vigas</a>
+</div>
+
+<div class="container" id="tension-simple">
+    <h2>Tensión Simple</h2>
+    <p>La tensión simple se refiere a la fuerza que se aplica a través de un material, resultando en un cambio en su forma o longitud.</p>
+    <p><strong>Fórmula:</strong> <code>σ = F / A</code> (donde σ es la tensión, F es la fuerza aplicada y A es el área).</p>
+    <div class="pdf-container">
+        <h3>Ejemplo Práctico</h3>
+        <iframe src="EJERCICIO_TENSION.pdf"></iframe>
+    </div>
+    <a href="#temario">Volver al Temario</a>
+</div>
+
+<div class="container" id="deformacion-simple">
+    <h2>Deformación Simple</h2>
+    <p>La deformación simple se refiere al cambio en la longitud de un material debido a la tensión aplicada.</p>
+    <p><strong>Fórmula:</strong> <code>ε = ΔL / L₀</code> (donde ε es la deformación, ΔL es el cambio en longitud y L₀ es la longitud original).</p>
+    <div class="pdf-container">
+        <h3>Ejemplo Práctico</h3>
+        <iframe src="EJERCICIO_DEFORMACION.pdf"></iframe>
+    </div>
+    <a href="#temario">Volver al Temario</a>
+</div>
+
+<div class="container" id="esfuerzos-combinados">
+    <h2>Esfuerzos Combinados</h2>
+    <p>Los esfuerzos combinados se refieren a la acción de más de una fuerza que actúa sobre un objeto, generando tensiones diferentes en él.</p>
+    <p><strong>Fórmula:</strong> Es necesario analizar cada tipo de esfuerzo individualmente y luego combinarlos.</p>
+    <div class="pdf-container">
+        <h3>Ejemplo Práctico</h3>
+        <iframe src="EJERCICIO_ESFUERZOS.pdf"></iframe>
+    </div>
+    <a href="#temario">Volver al Temario</a>
+</div>
+
+<div class="container" id="deformacion-vigas">
+    <h2>Deformación en Vigas</h2>
+    <p>La deformación en vigas se produce cuando se aplican cargas, generando una distribución de tensiones y deformaciones en la estructura.</p>
+    <p><strong>Fórmula:</strong> La deformación puede calcularse utilizando la ecuación de la curva de flexión.</p>
+    <div class="pdf-container">
+        <h3>Ejemplo Práctico</h3>
+        <iframe src="EJERCICIO_VIGAS.pdf"></iframe>
+    </div>
+    <a href="#temario">Volver al Temario</a>
 </div>
 
 <footer>
