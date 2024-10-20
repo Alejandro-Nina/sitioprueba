@@ -11,24 +11,35 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #e9f5ff;
         }
         header {
             background-color: #007bff;
             color: white;
             padding: 20px;
             text-align: center;
+            border-bottom: 5px solid #0056b3;
         }
         header h1 {
             margin: 0;
         }
         nav {
             margin: 20px 0;
+            text-align: center;
         }
         nav a {
             margin: 0 15px;
             color: #007bff;
             text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #007bff;
+            color: white;
         }
         .container {
             max-width: 900px;
@@ -40,10 +51,11 @@
         }
         h2 {
             color: #007bff;
-        }
-        h3 {
             border-bottom: 2px solid #007bff;
             padding-bottom: 10px;
+        }
+        h3 {
+            color: #0056b3;
         }
         ul {
             list-style-type: none;
@@ -52,7 +64,7 @@
         ul li {
             margin: 10px 0;
             padding: 10px;
-            background-color: #f9f9f9;
+            background-color: #e0f7fa;
             border-left: 4px solid #007bff;
             border-radius: 5px;
         }
@@ -64,6 +76,23 @@
             position: relative;
             bottom: 0;
             width: 100%;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .pdf-container {
+            margin: 20px 0;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
         }
     </style>
 </head>
@@ -83,58 +112,53 @@
 <div class="container">
     <section id="tension-simple">
         <h2>Tensión Simple</h2>
-        <p>La tensión simple se define como la fuerza aplicada sobre una unidad de área. Es fundamental en el análisis de estructuras y materiales.</p>
-        <ul>
-            <li>
-                <strong>Fórmula:</strong> <code>σ = F / A</code> (donde σ es la tensión, F es la fuerza aplicada y A es el área).
-            </li>
-            <li>
-                <strong>Ejemplo Práctico:</strong>
-                <a href="EJERCICIO_2.pdf.pdf" target="_blank">VER (PDF)</a>
-            </li>
-        </ul>
+        <p>La tensión simple es la fuerza aplicada a través de una sección transversal de un material. Se mide en Pascales (Pa) y es crucial en el análisis de estructuras.</p>
+        <p><strong>Fórmula:</strong> <code>σ = F / A</code> (donde σ es la tensión, F es la fuerza aplicada y A es el área).</p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Stress-Stress_curve.png" alt="Curva de Tensión">
+        <p>La relación entre tensión y deformación se representa en la curva de tensión-deformación, que muestra cómo un material responde a la carga.</p>
+        <div class="pdf-container">
+            <h3>Ejemplo Práctico</h3>
+            <iframe src="EJERCICIO_1.pdf.pdf"></iframe>
+        </div>
     </section>
 
     <section id="deformacion-simple">
         <h2>Deformación Simple</h2>
-        <p>La deformación se refiere al cambio de longitud de un material bajo carga y se puede clasificar en elástica y plástica.</p>
+        <p>La deformación se refiere al cambio de longitud de un material bajo carga. Se clasifica en:</p>
         <ul>
-            <li>
-                <strong>Tipos de Deformación:</strong> Elástica y Plástica.
-            </li>
-            <li>
-                <strong>Ejemplo Práctico:</strong>
-                <a href="EJERCICIO_3.pdf.pdf" target="_blank">VER (PDF)</a>
-            </li>
+            <li><strong>Deformación Elástica:</strong> Recuperable una vez que se elimina la carga.</li>
+            <li><strong>Deformación Plástica:</strong> Permanente después de la eliminación de la carga.</li>
         </ul>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Strain.png" alt="Deformación">
+        <p>La deformación se calcula utilizando la siguiente fórmula:</p>
+        <p><strong>Fórmula:</strong> <code>ε = ΔL / L₀</code> (donde ε es la deformación, ΔL es el cambio en longitud y L₀ es la longitud original).</p>
+        <div class="pdf-container">
+            <h3>Ejemplo Práctico</h3>
+            <iframe src="EJERCICIO_2.pdf.pdf"></iframe>
+        </div>
     </section>
 
     <section id="esfuerzos-combinados">
         <h2>Esfuerzos Combinados</h2>
-        <p>Los esfuerzos combinados se producen cuando se aplican múltiples tipos de carga sobre un material.</p>
-        <ul>
-            <li>
-                <strong>Análisis:</strong> Se utilizan métodos como el de Mohr para determinar los esfuerzos resultantes.
-            </li>
-            <li>
-                <strong>Ejemplo Práctico:</strong>
-                <a href="EJERCICIO_4.pdf.pdf" target="_blank">VER (PDF)</a>
-            </li>
-        </ul>
+        <p>Los esfuerzos combinados se producen cuando se aplican diferentes tipos de carga sobre un material. Esto puede incluir tensión, compresión y torsión.</p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Combined_Stresses.png" alt="Esfuerzos Combinados">
+        <p>Para el análisis de estos esfuerzos, se puede utilizar el criterio de von Mises y el círculo de Mohr.</p>
+        <div class="pdf-container">
+            <h3>Ejemplo Práctico</h3>
+            <iframe src="EJERCICIO_3.pdf.pdf"></iframe>
+        </div>
     </section>
 
     <section id="deformacion-vigas">
         <h2>Deformación en Vigas</h2>
-        <p>La deformación en vigas se refiere al cambio de forma que experimenta una viga bajo carga.</p>
-        <ul>
-            <li>
-                <strong>Teoría:</strong> Se aplica la teoría de Euler-Bernoulli para analizar la deformación.
-            </li>
-            <li>
-                <strong>Ejemplo Práctico:</strong>
-                <a href="EJERCICIO_6.pdf.pdf" target="_blank">VER (PDF)</a>
-            </li>
-        </ul>
+        <p>La deformación en vigas se refiere al cambio de forma que experimenta una viga bajo carga. Se analiza comúnmente mediante la teoría de Euler-Bernoulli.</p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Beam_deflection.gif" alt="Deformación en Vigas">
+        <p>La fórmula para calcular la deflexión máxima en una viga simplemente apoyada es:</p>
+        <p><strong>Fórmula:</strong> <code>δ = (PL³) / (48EI)</code> (donde P es la carga, L es la longitud de la viga, E es el módulo de elasticidad, e I es el momento de inercia).</p>
+        <div class="pdf-container">
+            <h3>Ejemplo Práctico</h3>
+            <iframe src="EJERCICIO_4.pdf"></iframe>
+        </div>
     </section>
 </div>
 
