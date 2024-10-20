@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unir PDFs - CARI</title>
+    <title>Unir PDFs con Orden y Eliminación</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -70,7 +69,7 @@
             position: relative;
             max-width: 600px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
@@ -163,17 +162,17 @@
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
     <div class="shape shape3"></div>
-    
     <h2>CARI</h2>
     <div class="container">
         <h1>Unir Archivos PDF</h1>
-        <input type="file" id="pdfFiles" multiple accept="application/pdf"><br>
+        <input type="file" id="pdfFiles" multiple accept="application/pdf"><br><br>
         <button id="addToListBtn">Agregar a la lista</button>
         <ul id="pdfList"></ul>
         <button id="mergeBtn">Unir PDFs</button>
     </div>
 
     <script>
+        let pdfList = [];
         let pdfDocList = [];
 
         document.getElementById('addToListBtn').addEventListener('click', async function() {
@@ -186,15 +185,17 @@
             for (const file of files) {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                pdfDocList.push({ name: file.name, doc: pdfDoc });
-                addToList(file.name, pdfDocList.length - 1);
+                pdfDocList.push(pdfDoc);
+                const fileName = file.name;
+                addToList(fileName, pdfDocList.length - 1);
             }
         });
 
         document.getElementById('mergeBtn').addEventListener('click', async function() {
             const mergedPdf = await PDFLib.PDFDocument.create();
-            for (const { doc } of pdfDocList) {
-                const copiedPages = await mergedPdf.copyPages(doc, doc.getPageIndices());
+            for (let i = 0; i < pdfDocList.length; i++) {
+                const pdfDoc = pdfDocList[i];
+                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
                 copiedPages.forEach((page) => mergedPdf.addPage(page));
             }
 
@@ -218,7 +219,7 @@
             listItem.addEventListener('dragstart', dragStart);
             listItem.addEventListener('dragover', dragOver);
             listItem.addEventListener('drop', dragDrop);
-
+            
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'Eliminar';
             removeBtn.className = 'remove-btn';
@@ -226,23 +227,17 @@
 
             listItem.appendChild(removeBtn);
             document.getElementById('pdfList').appendChild(listItem);
+            pdfList.push(fileName);
         }
 
         function removeFromList(index) {
+            pdfList.splice(index, 1);
             pdfDocList.splice(index, 1);
             updateList();
         }
 
-        function updateList() {
-            const listElement = document.getElementById('pdfList');
-            listElement.innerHTML = '';
-            pdfDocList.forEach((pdfDoc, index) => {
-                addToList(pdfDoc.name, index);
-            });
-        }
-
         function dragStart(e) {
-            e.dataTransfer.setData('text/plain', e.target.getAttribute('data-index'));
+            e.dataTransfer.setData('text', e.target.getAttribute('data-index'));
         }
 
         function dragOver(e) {
@@ -250,17 +245,27 @@
         }
 
         function dragDrop(e) {
-            e.preventDefault();
-            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+            const draggedIndex = parseInt(e.dataTransfer.getData('text'));
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
-
             if (draggedIndex !== targetIndex) {
-                // Mover el elemento en la lista
-                const draggedItem = pdfDocList[draggedIndex];
+                const movedItem = pdfList[draggedIndex];
+                pdfList.splice(draggedIndex, 1);
+                pdfList.splice(targetIndex, 0, movedItem);
+                
+                const movedDoc = pdfDocList[draggedIndex];
                 pdfDocList.splice(draggedIndex, 1);
-                pdfDocList.splice(targetIndex, 0, draggedItem);
+                pdfDocList.splice(targetIndex, 0, movedDoc);
+                
                 updateList();
             }
+        }
+
+        function updateList() {
+            const list = document.getElementById('pdfList');
+            list.innerHTML = '';
+            pdfList.forEach((fileName, index) => {
+                addToList(fileName, index);
+            });
         }
     </script>
 </body>
