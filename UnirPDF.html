@@ -41,6 +41,7 @@
             align-items: center;
             background-color: #f9f9f9;
             transition: background-color 0.3s;
+            position: relative; /* Agregado para controlar la posición del botón */
         }
         #pdfList li:hover {
             background-color: #e8f0fe;
@@ -58,6 +59,10 @@
             transition: background-color 0.3s;
             font-size: 12px; /* Tamaño más pequeño */
             width: 80px; /* Ancho fijo para el botón */
+            position: absolute; /* Cambiado a absolute para evitar superposición */
+            right: 10px; /* Ubicación desde el lado derecho */
+            top: 50%; /* Centrado vertical */
+            transform: translateY(-50%); /* Ajuste de centramiento */
         }
         .remove-btn:hover {
             background-color: #ff1a1a;
