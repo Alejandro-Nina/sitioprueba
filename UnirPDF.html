@@ -48,28 +48,25 @@
             text-align: center;
             color: #4a90e2;
             margin-bottom: 10px;
-            font-size: 28px;
+            font-size: 48px; /* Aumenta el tamaño del título */
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 20;
         }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin: 0;
-            font-size: 48px;
-            font-weight: bold;
+        .moving-cari {
             position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: bounce 2s infinite;
-            z-index: 20; /* Asegura que el texto esté por encima de las formas */
+            color: #4a90e2;
+            font-size: 24px; /* Tamaño más pequeño */
+            opacity: 0.8;
+            animation: float 5s infinite;
+            z-index: 10; /* Asegura que se vea por debajo del título grande */
         }
         .container {
             position: relative;
             max-width: 600px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
@@ -156,13 +153,26 @@
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
             50% { transform: translate(-50%, -50%) scale(1.1); }
         }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
     <div class="shape shape3"></div>
-    <h2>CARI</h2>
+    <h1>CARI</h1>
+
+    <!-- Palabras CARI en movimiento -->
+    <div class="moving-cari" style="top: 10%; left: 20%;">CARI</div>
+    <div class="moving-cari" style="top: 30%; left: 50%;">CARI</div>
+    <div class="moving-cari" style="top: 50%; left: 70%;">CARI</div>
+    <div class="moving-cari" style="top: 70%; left: 30%;">CARI</div>
+    
     <div class="container">
         <h1>Unir Archivos PDF</h1>
         <input type="file" id="pdfFiles" multiple accept="application/pdf"><br><br>
@@ -248,14 +258,8 @@
             const draggedIndex = parseInt(e.dataTransfer.getData('text'));
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
             if (draggedIndex !== targetIndex) {
-                const movedItem = pdfList[draggedIndex];
-                pdfList.splice(draggedIndex, 1);
-                pdfList.splice(targetIndex, 0, movedItem);
-                
-                const movedDoc = pdfDocList[draggedIndex];
-                pdfDocList.splice(draggedIndex, 1);
-                pdfDocList.splice(targetIndex, 0, movedDoc);
-                
+                pdfList.splice(targetIndex, 0, pdfList.splice(draggedIndex, 1)[0]);
+                pdfDocList.splice(targetIndex, 0, pdfDocList.splice(draggedIndex, 1)[0]);
                 updateList();
             }
         }
