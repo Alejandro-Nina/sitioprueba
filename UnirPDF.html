@@ -41,7 +41,7 @@
             align-items: center;
             background-color: #f9f9f9;
             transition: background-color 0.3s;
-            position: relative; /* Agregado para controlar la posición del botón */
+            position: relative;
         }
         #pdfList li:hover {
             background-color: #e8f0fe;
@@ -53,16 +53,16 @@
             background-color: #ff4d4d;
             color: white;
             border: none;
-            padding: 5px 8px; /* Ajustar padding para que sea más pequeño */
+            padding: 5px 8px;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 12px; /* Tamaño más pequeño */
-            width: 80px; /* Ancho fijo para el botón */
-            position: absolute; /* Cambiado a absolute para evitar superposición */
-            right: 10px; /* Ubicación desde el lado derecho */
-            top: 50%; /* Centrado vertical */
-            transform: translateY(-50%); /* Ajuste de centramiento */
+            font-size: 12px;
+            width: 80px;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
         }
         .remove-btn:hover {
             background-color: #ff1a1a;
@@ -100,7 +100,6 @@
     </div>
 
     <script>
-        let pdfList = [];
         let pdfDocList = [];
 
         document.getElementById('addToListBtn').addEventListener('click', async function() {
@@ -113,17 +112,15 @@
             for (const file of files) {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                pdfDocList.push(pdfDoc);
-                const fileName = file.name;
-                addToList(fileName, pdfDocList.length - 1); // Pasar el índice del archivo
+                pdfDocList.push({ name: file.name, doc: pdfDoc }); // Almacenar el nombre y el documento
+                addToList(file.name, pdfDocList.length - 1); // Pasar el índice del archivo
             }
         });
 
         document.getElementById('mergeBtn').addEventListener('click', async function() {
             const mergedPdf = await PDFLib.PDFDocument.create();
-            for (let i = 0; i < pdfDocList.length; i++) {
-                const pdfDoc = pdfDocList[i];
-                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            for (const { doc } of pdfDocList) {
+                const copiedPages = await mergedPdf.copyPages(doc, doc.getPageIndices());
                 copiedPages.forEach((page) => mergedPdf.addPage(page));
             }
 
@@ -158,15 +155,15 @@
         }
 
         function removeFromList(index) {
-            pdfDocList.splice(index, 1);
-            updateList();
+            pdfDocList.splice(index, 1); // Eliminar el documento de la lista
+            updateList(); // Actualizar la lista en la interfaz
         }
 
         function updateList() {
             const listElement = document.getElementById('pdfList');
             listElement.innerHTML = ''; // Limpiar la lista
-            pdfDocList.forEach((_, index) => {
-                addToList(pdfList[index], index); // Mantener los nombres originales
+            pdfDocList.forEach((pdfDoc, index) => {
+                addToList(pdfDoc.name, index); // Mantener los nombres originales
             });
         }
 
@@ -184,11 +181,12 @@
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
 
             if (draggedIndex !== targetIndex) {
+                // Cambiar el orden en la lista
                 const temp = pdfDocList[draggedIndex];
                 pdfDocList[draggedIndex] = pdfDocList[targetIndex];
                 pdfDocList[targetIndex] = temp;
 
-                updateList();
+                updateList(); // Actualizar la lista visualmente
             }
         }
     </script>
