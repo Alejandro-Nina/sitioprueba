@@ -48,6 +48,7 @@
         let pdfList = [];
         let pdfDocList = [];
 
+        // Añadir PDFs a la lista
         document.getElementById('addToListBtn').addEventListener('click', async function() {
             const files = document.getElementById('pdfFiles').files;
             if (files.length === 0) {
@@ -64,6 +65,7 @@
             }
         });
 
+        // Unir PDFs
         document.getElementById('mergeBtn').addEventListener('click', async function() {
             const mergedPdf = await PDFLib.PDFDocument.create();
             for (let i = 0; i < pdfDocList.length; i++) {
@@ -84,6 +86,7 @@
             URL.revokeObjectURL(url);
         });
 
+        // Añadir archivo a la lista visual
         function addToList(fileName, index) {
             const listItem = document.createElement('li');
             listItem.textContent = fileName;
@@ -92,7 +95,7 @@
             listItem.addEventListener('dragstart', dragStart);
             listItem.addEventListener('dragover', dragOver);
             listItem.addEventListener('drop', dragDrop);
-            
+
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'Eliminar';
             removeBtn.className = 'remove-btn';
@@ -103,24 +106,51 @@
             pdfList.push(fileName);
         }
 
+        // Eliminar archivo de la lista
         function removeFromList(index) {
             pdfList.splice(index, 1);
             pdfDocList.splice(index, 1);
             updateList();
         }
 
+        // Actualizar la lista visual después de eliminar
         function updateList() {
-            const pdfListElement = document.getElementById('pdfList');
-            pdfListElement.innerHTML = '';
-            pdfList.forEach((fileName, index) => addToList(fileName, index));
+            const listElement = document.getElementById('pdfList');
+            listElement.innerHTML = '';
+            pdfList.forEach((fileName, index) => {
+                addToList(fileName, index);
+            });
         }
 
+        // Iniciar arrastrar
         function dragStart(e) {
-            e.dataTransfer.setData('text', e.target.getAttribute('data-index'));
+            e.dataTransfer.setData('text/plain', e.target.getAttribute('data-index'));
         }
 
+        // Permitir soltar en el área
         function dragOver(e) {
             e.preventDefault();
-       
+        }
+
+        // Cambiar el orden de los PDFs al soltar
+        function dragDrop(e) {
+            e.preventDefault();
+            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+            const targetIndex = parseInt(e.target.getAttribute('data-index'));
+
+            // Intercambiar los PDFs en el array
+            if (draggedIndex !== targetIndex) {
+                const temp = pdfDocList[draggedIndex];
+                pdfDocList[draggedIndex] = pdfDocList[targetIndex];
+                pdfDocList[targetIndex] = temp;
+
+                const tempName = pdfList[draggedIndex];
+                pdfList[draggedIndex] = pdfList[targetIndex];
+                pdfList[targetIndex] = tempName;
+
+                updateList();
+            }
+        }
+    </script>
 </body>
 </html>
