@@ -92,7 +92,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>JUNTAR PDFSCARI</h1>
+        <h1>Unir Archivos PDF</h1>
         <input type="file" id="pdfFiles" multiple accept="application/pdf"><br>
         <button id="addToListBtn">Agregar a la lista</button>
         <ul id="pdfList"></ul>
@@ -112,8 +112,8 @@
             for (const file of files) {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                pdfDocList.push({ name: file.name, doc: pdfDoc }); // Almacenar el nombre y el documento
-                addToList(file.name, pdfDocList.length - 1); // Pasar el índice del archivo
+                pdfDocList.push({ name: file.name, doc: pdfDoc });
+                addToList(file.name, pdfDocList.length - 1);
             }
         });
 
@@ -129,7 +129,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'Cari.pdf'; // Cambiar el nombre del archivo a Cari.pdf
+            a.download = 'Cari.pdf';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -155,15 +155,15 @@
         }
 
         function removeFromList(index) {
-            pdfDocList.splice(index, 1); // Eliminar el documento de la lista
-            updateList(); // Actualizar la lista en la interfaz
+            pdfDocList.splice(index, 1);
+            updateList();
         }
 
         function updateList() {
             const listElement = document.getElementById('pdfList');
-            listElement.innerHTML = ''; // Limpiar la lista
+            listElement.innerHTML = '';
             pdfDocList.forEach((pdfDoc, index) => {
-                addToList(pdfDoc.name, index); // Mantener los nombres originales
+                addToList(pdfDoc.name, index);
             });
         }
 
@@ -181,12 +181,12 @@
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
 
             if (draggedIndex !== targetIndex) {
-                // Cambiar el orden en la lista
-                const temp = pdfDocList[draggedIndex];
-                pdfDocList[draggedIndex] = pdfDocList[targetIndex];
-                pdfDocList[targetIndex] = temp;
+                // Mover el elemento en la lista
+                const draggedItem = pdfDocList[draggedIndex];
+                pdfDocList.splice(draggedIndex, 1); // Eliminar el elemento arrastrado
+                pdfDocList.splice(targetIndex, 0, draggedItem); // Insertar en la nueva posición
 
-                updateList(); // Actualizar la lista visualmente
+                updateList();
             }
         }
     </script>
