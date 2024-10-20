@@ -146,6 +146,10 @@
     <h2>CARI</h2>
     <div class="container">
         <h1>Unir Archivos PDF</h1>
+        
+        <!-- Botón para volver a la página anterior -->
+        <button onclick="window.location.href='temario.html'">Volver al Temario</button>
+        
         <input type="file" id="pdfFiles" multiple accept="application/pdf"><br>
         <button id="addToListBtn">Agregar a la lista</button>
         <ul id="pdfList"></ul>
@@ -234,11 +238,9 @@
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
 
             if (draggedIndex !== targetIndex) {
-                // Mover el elemento en la lista
                 const draggedItem = pdfDocList[draggedIndex];
-                pdfDocList.splice(draggedIndex, 1); // Eliminar el elemento arrastrado
-                pdfDocList.splice(targetIndex, 0, draggedItem); // Insertar en la nueva posición
-
+                pdfDocList.splice(draggedIndex, 1);
+                pdfDocList.splice(targetIndex, 0, draggedItem);
                 updateList();
             }
         }
