@@ -27,6 +27,7 @@
             background-color: #a1c4fd;
             top: -100px;
             left: -150px;
+            animation-duration: 12s;
         }
         .shape2 {
             width: 250px;
@@ -42,7 +43,7 @@
             background-color: #c8e0f9;
             bottom: -50px;
             left: -200px;
-            animation-duration: 12s;
+            animation-duration: 10s;
         }
         h1 {
             text-align: center;
@@ -63,6 +64,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             animation: bounce 2s infinite;
+            z-index: 20; /* Asegura que el texto esté por encima de las formas */
         }
         .container {
             position: relative;
@@ -148,7 +150,7 @@
 
         @keyframes move {
             0% { transform: translateY(0); }
-            100% { transform: translateY(50px); }
+            100% { transform: translateY(20px); }
         }
 
         @keyframes bounce {
@@ -255,9 +257,8 @@
             if (draggedIndex !== targetIndex) {
                 // Mover el elemento en la lista
                 const draggedItem = pdfDocList[draggedIndex];
-                pdfDocList.splice(draggedIndex, 1); // Eliminar el elemento arrastrado
-                pdfDocList.splice(targetIndex, 0, draggedItem); // Insertar en la nueva posición
-
+                pdfDocList.splice(draggedIndex, 1);
+                pdfDocList.splice(targetIndex, 0, draggedItem);
                 updateList();
             }
         }
