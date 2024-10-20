@@ -3,52 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unir PDFs con Orden y Eliminación</title>
+    <title>Unir PDFs</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         #pdfList {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 20px 0;
             border: 1px solid #ccc;
-            max-width: 400px;
+            border-radius: 5px;
+            overflow: hidden;
         }
         #pdfList li {
-            padding: 10px;
+            padding: 15px;
             border-bottom: 1px solid #ccc;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: move;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+        #pdfList li:hover {
+            background-color: #e8f0fe;
         }
         #pdfList li:last-child {
             border-bottom: none;
         }
         .remove-btn {
-            background-color: red;
+            background-color: #ff4d4d;
             color: white;
             border: none;
             padding: 5px 10px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .remove-btn:hover {
+            background-color: #ff1a1a;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #357abd;
         }
     </style>
 </head>
 <body>
-    <h1>Unir Archivos PDF</h1>
-    <input type="file" id="pdfFiles" multiple accept="application/pdf"><br><br>
-    <button id="addToListBtn">Agregar a la lista</button>
-    <ul id="pdfList"></ul>
-    <button id="mergeBtn">Unir PDFs</button>
+    <div class="container">
+        <h1>Unir Archivos PDF</h1>
+        <input type="file" id="pdfFiles" multiple accept="application/pdf"><br>
+        <button id="addToListBtn">Agregar a la lista</button>
+        <ul id="pdfList"></ul>
+        <button id="mergeBtn">Unir PDFs</button>
+    </div>
 
     <script>
         let pdfList = [];
         let pdfDocList = [];
 
-        // Añadir PDFs a la lista
         document.getElementById('addToListBtn').addEventListener('click', async function() {
             const files = document.getElementById('pdfFiles').files;
             if (files.length === 0) {
@@ -65,7 +112,6 @@
             }
         });
 
-        // Unir PDFs
         document.getElementById('mergeBtn').addEventListener('click', async function() {
             const mergedPdf = await PDFLib.PDFDocument.create();
             for (let i = 0; i < pdfDocList.length; i++) {
@@ -86,7 +132,6 @@
             URL.revokeObjectURL(url);
         });
 
-        // Añadir archivo a la lista visual
         function addToList(fileName) {
             const listItem = document.createElement('li');
             listItem.textContent = fileName;
@@ -108,13 +153,11 @@
             document.getElementById('pdfList').appendChild(listItem);
         }
 
-        // Eliminar archivo de la lista
         function removeFromList(index) {
             pdfDocList.splice(index, 1);
             updateList();
         }
 
-        // Actualizar la lista visual después de eliminar
         function updateList() {
             const listElement = document.getElementById('pdfList');
             listElement.innerHTML = '';
@@ -123,24 +166,20 @@
             });
         }
 
-        // Iniciar arrastrar
         function dragStart(e) {
             e.dataTransfer.setData('text/plain', e.target.getAttribute('data-index'));
         }
 
-        // Permitir soltar en el área
         function dragOver(e) {
             e.preventDefault();
         }
 
-        // Cambiar el orden de los PDFs al soltar
         function dragDrop(e) {
             e.preventDefault();
             const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
 
             if (draggedIndex !== targetIndex) {
-                // Intercambiar posiciones en pdfDocList
                 const temp = pdfDocList[draggedIndex];
                 pdfDocList[draggedIndex] = pdfDocList[targetIndex];
                 pdfDocList[targetIndex] = temp;
