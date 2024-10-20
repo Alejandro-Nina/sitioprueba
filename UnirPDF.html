@@ -61,7 +61,7 @@
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
                 pdfDocList.push(pdfDoc);
                 const fileName = file.name;
-                addToList(fileName, pdfDocList.length - 1);
+                addToList(fileName);
             }
         });
 
@@ -87,10 +87,10 @@
         });
 
         // Añadir archivo a la lista visual
-        function addToList(fileName, index) {
+        function addToList(fileName) {
             const listItem = document.createElement('li');
             listItem.textContent = fileName;
-            listItem.setAttribute('data-index', index);
+            listItem.setAttribute('data-index', pdfDocList.length - 1);
             listItem.setAttribute('draggable', true);
             listItem.addEventListener('dragstart', dragStart);
             listItem.addEventListener('dragover', dragOver);
@@ -99,16 +99,17 @@
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'Eliminar';
             removeBtn.className = 'remove-btn';
-            removeBtn.addEventListener('click', () => removeFromList(index));
+            removeBtn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.parentElement.getAttribute('data-index'));
+                removeFromList(index);
+            });
 
             listItem.appendChild(removeBtn);
             document.getElementById('pdfList').appendChild(listItem);
-            pdfList.push(fileName);
         }
 
         // Eliminar archivo de la lista
         function removeFromList(index) {
-            pdfList.splice(index, 1);
             pdfDocList.splice(index, 1);
             updateList();
         }
@@ -117,8 +118,8 @@
         function updateList() {
             const listElement = document.getElementById('pdfList');
             listElement.innerHTML = '';
-            pdfList.forEach((fileName, index) => {
-                addToList(fileName, index);
+            pdfDocList.forEach((_, index) => {
+                addToList(`Archivo ${index + 1}`);
             });
         }
 
@@ -138,15 +139,11 @@
             const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
             const targetIndex = parseInt(e.target.getAttribute('data-index'));
 
-            // Intercambiar los PDFs en el array
             if (draggedIndex !== targetIndex) {
+                // Intercambiar posiciones en pdfDocList
                 const temp = pdfDocList[draggedIndex];
                 pdfDocList[draggedIndex] = pdfDocList[targetIndex];
                 pdfDocList[targetIndex] = temp;
-
-                const tempName = pdfList[draggedIndex];
-                pdfList[draggedIndex] = pdfList[targetIndex];
-                pdfList[targetIndex] = tempName;
 
                 updateList();
             }
