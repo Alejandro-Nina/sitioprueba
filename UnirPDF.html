@@ -94,6 +94,13 @@
             background-color: #357abd;
             transform: translateY(-2px);
         }
+        /* Estilo para el botón de volver al temario */
+        .back-btn {
+            background-color: #28a745; /* Color verde */
+        }
+        .back-btn:hover {
+            background-color: #218838; /* Color verde más oscuro al pasar el mouse */
+        }
         #pdfList {
             list-style: none;
             padding: 0;
@@ -147,13 +154,13 @@
     <div class="container">
         <h1>Unir Archivos PDF</h1>
         
-        <!-- Botón para volver a la página anterior -->
-        <button onclick="window.location.href='temario.html'">Volver al Temario</button>
-        
         <input type="file" id="pdfFiles" multiple accept="application/pdf"><br>
         <button id="addToListBtn">Agregar a la lista</button>
         <ul id="pdfList"></ul>
         <button id="mergeBtn">Unir PDFs</button>
+        
+        <!-- Botón para volver a la página anterior -->
+        <button class="back-btn" onclick="window.location.href='temario.html'">Volver al Temario</button>
     </div>
 
     <script>
