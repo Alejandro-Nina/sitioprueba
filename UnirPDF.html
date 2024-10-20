@@ -108,7 +108,7 @@
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
                 pdfDocList.push(pdfDoc);
                 const fileName = file.name;
-                addToList(fileName);
+                addToList(fileName, pdfDocList.length - 1); // Pasar el índice del archivo
             }
         });
 
@@ -125,17 +125,17 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'merged.pdf';
+            a.download = 'Cari.pdf'; // Cambiar el nombre del archivo a Cari.pdf
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         });
 
-        function addToList(fileName) {
+        function addToList(fileName, index) {
             const listItem = document.createElement('li');
             listItem.textContent = fileName;
-            listItem.setAttribute('data-index', pdfDocList.length - 1);
+            listItem.setAttribute('data-index', index);
             listItem.setAttribute('draggable', true);
             listItem.addEventListener('dragstart', dragStart);
             listItem.addEventListener('dragover', dragOver);
@@ -144,10 +144,7 @@
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'Eliminar';
             removeBtn.className = 'remove-btn';
-            removeBtn.addEventListener('click', (e) => {
-                const index = parseInt(e.target.parentElement.getAttribute('data-index'));
-                removeFromList(index);
-            });
+            removeBtn.addEventListener('click', () => removeFromList(index));
 
             listItem.appendChild(removeBtn);
             document.getElementById('pdfList').appendChild(listItem);
@@ -160,9 +157,9 @@
 
         function updateList() {
             const listElement = document.getElementById('pdfList');
-            listElement.innerHTML = '';
+            listElement.innerHTML = ''; // Limpiar la lista
             pdfDocList.forEach((_, index) => {
-                addToList(`Archivo ${index + 1}`);
+                addToList(pdfList[index], index); // Mantener los nombres originales
             });
         }
 
