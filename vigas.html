@@ -10,19 +10,20 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background: #f4f4f4;
+            background-color: #4CAF50;
+            color: white;
         }
         h1 {
             text-align: center;
         }
         .form-container {
-            margin: 20px 0;
-            padding: 20px;
             background-color: white;
+            color: black;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
         }
-        .form-container input {
+        .form-container input, select {
             width: 100%;
             padding: 8px;
             margin: 10px 0;
@@ -40,54 +41,76 @@
         button:hover {
             background-color: #45a049;
         }
-        canvas {
+        #chart-container {
             width: 100%;
             height: 400px;
+            margin-bottom: 20px;
+        }
+        .reacciones-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
+
     <h1>Calculadora de Vigas</h1>
+
+    <!-- Formulario de Entrada -->
     <div class="form-container">
         <h3>Datos de la Viga</h3>
         <label for="largo">Longitud de la viga (m):</label>
         <input type="number" id="largo" placeholder="Longitud de la viga" />
-        
+
+        <label for="apoyos">Número de apoyos:</label>
+        <input type="number" id="apoyos" placeholder="Número de apoyos" />
+
+        <label for="tipo-apoyo">Tipo de apoyo:</label>
+        <select id="tipo-apoyo">
+            <option value="empotrado">Empotrado</option>
+            <option value="movil">Móvil</option>
+            <option value="fijo">Fijo</option>
+        </select>
+
         <label for="carga">Carga puntual (N):</label>
         <input type="number" id="carga" placeholder="Carga puntual" />
 
-        <label for="posicion">Posición de la carga (m):</label>
-        <input type="number" id="posicion" placeholder="Posición de la carga" />
+        <label for="tramo">Tramo de la carga (m):</label>
+        <input type="text" id="tramo" placeholder="De qué tramo a qué tramo (ej: 2-5)" />
 
         <button onclick="calcular()">Calcular</button>
     </div>
 
-    <canvas id="chart"></canvas>
+    <!-- Gráfico de la viga -->
+    <div id="chart-container">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <!-- Reacciones calculadas -->
+    <div class="reacciones-container" id="reacciones">
+        <h3>Reacciones en los Apoyos</h3>
+        <p id="R1"></p>
+        <p id="R2"></p>
+    </div>
 
     <script>
         function calcular() {
             // Obtener los valores de los inputs
             const largo = parseFloat(document.getElementById('largo').value);
+            const apoyos = parseInt(document.getElementById('apoyos').value);
+            const tipoApoyo = document.getElementById('tipo-apoyo').value;
             const carga = parseFloat(document.getElementById('carga').value);
-            const posicion = parseFloat(document.getElementById('posicion').value);
+            const tramo = document.getElementById('tramo').value.split("-").map(val => parseFloat(val.trim()));
 
-            // Calcular las reacciones
-            const R1 = (carga * (largo - posicion)) / largo;
-            const R2 = (carga * posicion) / largo;
+            // Calcular las reacciones (simplificado)
+            let R1 = carga * (largo - tramo[0]) / largo;
+            let R2 = carga * tramo[0] / largo;
 
-            // Crear datos de los momentos y cortantes
-            const momentos = [];
-            const cortantes = [];
-
-            for (let x = 0; x <= largo; x += 0.1) {
-                if (x <= posicion) {
-                    cortantes.push(R1);
-                    momentos.push(R1 * x);
-                } else {
-                    cortantes.push(R1 - carga);
-                    momentos.push(R1 * x - carga * (x - posicion));
-                }
-            }
+            // Mostrar las reacciones calculadas
+            document.getElementById('R1').textContent = `Reacción en el apoyo 1 (R1): ${R1.toFixed(2)} N`;
+            document.getElementById('R2').textContent = `Reacción en el apoyo 2 (R2): ${R2.toFixed(2)} N`;
 
             // Graficar los resultados
             const ctx = document.getElementById('chart').getContext('2d');
@@ -98,14 +121,14 @@
                     datasets: [
                         {
                             label: 'Cortante',
-                            data: cortantes,
+                            data: Array(largo * 10 + 1).fill(R1),
                             borderColor: 'red',
                             borderWidth: 2,
                             fill: false,
                         },
                         {
                             label: 'Momento',
-                            data: momentos,
+                            data: Array(largo * 10 + 1).fill(R1 * 10),
                             borderColor: 'blue',
                             borderWidth: 2,
                             fill: false,
