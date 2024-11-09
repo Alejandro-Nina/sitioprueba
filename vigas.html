@@ -3,140 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Vigas</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
+    <title>Calculadora de Viga</title>
+    <script>
+        function calcular() {
+            let longitud = parseFloat(document.getElementById('longitud').value);
+            let posicionesCarga = document.getElementById('posicionesCarga').value.split(',').map(Number);
+            let cargas = document.getElementById('cargas').value.split(',').map(Number);
+            
+            let reacciones = [0, 0];  // Reacciones en A y B
+            let momentos = [];
+
+            // Calcular las reacciones
+            let cargaTotal = cargas.reduce((acc, val) => acc + val, 0);
+            reacciones[0] = cargaTotal / 2;  // Distribución uniforme de reacciones
+            reacciones[1] = cargaTotal / 2;
+
+            // Calcular momentos flectores
+            for (let x = 0; x <= longitud; x += longitud / 100) {
+                let momento = reacciones[0] * x;
+                for (let i = 0; i < posicionesCarga.length; i++) {
+                    if (x >= posicionesCarga[i]) {
+                        momento -= cargas[i] * (x - posicionesCarga[i]);
+                    }
+                }
+                momentos.push({x: x.toFixed(2), momento: momento.toFixed(2)});
+            }
+
+            document.getElementById('salida').innerHTML = `
+                <p>Reacciones en A y B: ${reacciones[0].toFixed(2)} N, ${reacciones[1].toFixed(2)} N</p>
+                <p>Momentos flectores:</p>
+                <pre>${JSON.stringify(momentos, null, 2)}</pre>
+            `;
         }
-        h1 {
-            text-align: center;
-        }
-        .form-container {
-            background-color: white;
-            color: black;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .form-container input, select {
-            width: 100%;
-            padding: 8px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #chart-container {
-            width: 100%;
-            height: 400px;
-            margin-bottom: 20px;
-        }
-        .reacciones-container {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-        }
-    </style>
+    </script>
 </head>
 <body>
+    <h1>Calculadora de Reacciones y Momentos de Viga</h1>
+    <div>
+        <label for="longitud">Longitud de la Viga (m): </label>
+        <input type="number" id="longitud" required><br><br>
 
-    <h1>Calculadora de Vigas</h1>
+        <label for="posicionesCarga">Posiciones de Carga (separadas por comas, m): </label>
+        <input type="text" id="posicionesCarga" required><br><br>
 
-    <!-- Formulario de Entrada -->
-    <div class="form-container">
-        <h3>Datos de la Viga</h3>
-        <label for="largo">Longitud de la viga (m):</label>
-        <input type="number" id="largo" placeholder="Longitud de la viga" />
-
-        <label for="apoyos">Número de apoyos:</label>
-        <input type="number" id="apoyos" placeholder="Número de apoyos" />
-
-        <label for="tipo-apoyo">Tipo de apoyo:</label>
-        <select id="tipo-apoyo">
-            <option value="empotrado">Empotrado</option>
-            <option value="movil">Móvil</option>
-            <option value="fijo">Fijo</option>
-        </select>
-
-        <label for="carga">Carga puntual (N):</label>
-        <input type="number" id="carga" placeholder="Carga puntual" />
-
-        <label for="tramo">Tramo de la carga (m):</label>
-        <input type="text" id="tramo" placeholder="De qué tramo a qué tramo (ej: 2-5)" />
+        <label for="cargas">Magnitudes de Carga (separadas por comas, N): </label>
+        <input type="text" id="cargas" required><br><br>
 
         <button onclick="calcular()">Calcular</button>
     </div>
 
-    <!-- Gráfico de la viga -->
-    <div id="chart-container">
-        <canvas id="chart"></canvas>
-    </div>
-
-    <!-- Reacciones calculadas -->
-    <div class="reacciones-container" id="reacciones">
-        <h3>Reacciones en los Apoyos</h3>
-        <p id="R1"></p>
-        <p id="R2"></p>
-    </div>
-
-    <script>
-        function calcular() {
-            // Obtener los valores de los inputs
-            const largo = parseFloat(document.getElementById('largo').value);
-            const apoyos = parseInt(document.getElementById('apoyos').value);
-            const tipoApoyo = document.getElementById('tipo-apoyo').value;
-            const carga = parseFloat(document.getElementById('carga').value);
-            const tramo = document.getElementById('tramo').value.split("-").map(val => parseFloat(val.trim()));
-
-            // Calcular las reacciones (simplificado)
-            let R1 = carga * (largo - tramo[0]) / largo;
-            let R2 = carga * tramo[0] / largo;
-
-            // Mostrar las reacciones calculadas
-            document.getElementById('R1').textContent = `Reacción en el apoyo 1 (R1): ${R1.toFixed(2)} N`;
-            document.getElementById('R2').textContent = `Reacción en el apoyo 2 (R2): ${R2.toFixed(2)} N`;
-
-            // Graficar los resultados
-            const ctx = document.getElementById('chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({ length: largo * 10 + 1 }, (_, i) => i / 10),
-                    datasets: [
-                        {
-                            label: 'Cortante',
-                            data: Array(largo * 10 + 1).fill(R1),
-                            borderColor: 'red',
-                            borderWidth: 2,
-                            fill: false,
-                        },
-                        {
-                            label: 'Momento',
-                            data: Array(largo * 10 + 1).fill(R1 * 10),
-                            borderColor: 'blue',
-                            borderWidth: 2,
-                            fill: false,
-                        },
-                    ]
-                }
-            });
-        }
-    </script>
+    <div id="salida"></div>
 </body>
 </html>
