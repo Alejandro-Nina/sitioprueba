@@ -3,119 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Vigas</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.2/math.js"></script>
+    <title>Calculadora de Viga Detallada</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.8.0/chart.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
+            margin: 0;
             padding: 20px;
+        }
+        h1 {
+            text-align: center;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            background-color: #fff;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        input, select, button {
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         button {
             background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
         button:hover {
             background-color: #45a049;
         }
+        .chart-container {
+            margin-top: 20px;
+        }
+        canvas {
+            max-width: 100%;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Calculadora de Vigas</h1>
-        
-        <label for="loadType">Selecciona el tipo de carga:</label>
-        <select id="loadType">
-            <option value="point">Carga puntual</option>
-            <option value="uniform">Carga distribuida</option>
-        </select>
 
-        <label for="length">Longitud de la viga (m):</label>
-        <input type="number" id="length" value="5">
+<div class="container">
+    <h1>Calculadora de Viga Detallada</h1>
 
-        <label for="supportType">Tipo de apoyo:</label>
-        <select id="supportType">
-            <option value="fixed">Fijo</option>
-            <option value="roller">Rodillo</option>
-            <option value="pinned">Empotrado</option>
-        </select>
-
-        <label for="loadValue">Valor de la carga (kN):</label>
-        <input type="number" id="loadValue" value="10">
-
-        <label for="position">Posición de la carga (m, desde el apoyo):</label>
-        <input type="number" id="position" value="2">
-
-        <button id="calculateBtn">Calcular</button>
-
-        <div id="result"></div>
-        <div id="graph"></div>
+    <div class="form-group">
+        <label for="vigaLength">Longitud de la viga (m):</label>
+        <input type="number" id="vigaLength" placeholder="Ej. 6" />
     </div>
 
-    <script>
-        document.getElementById('calculateBtn').addEventListener('click', function() {
-            const length = parseFloat(document.getElementById('length').value);
-            const loadValue = parseFloat(document.getElementById('loadValue').value);
-            const position = parseFloat(document.getElementById('position').value);
-            const loadType = document.getElementById('loadType').value;
+    <div class="form-group">
+        <label for="carga">Carga puntual (N):</label>
+        <input type="number" id="carga" placeholder="Ej. 1000" />
+    </div>
 
-            let reaction1 = 0;
-            let reaction2 = 0;
-            let moments = [];
+    <div class="form-group">
+        <label for="cargaDistribuida">Carga distribuida (N/m):</label>
+        <input type="number" id="cargaDistribuida" placeholder="Ej. 500" />
+    </div>
 
-            // Cálculos según tipo de carga
-            if (loadType === 'point') {
-                reaction1 = loadValue * (length - position) / length;
-                reaction2 = loadValue * position / length;
-            } else if (loadType === 'uniform') {
-                const load = loadValue;
-                reaction1 = load * (length / 2);
-                reaction2 = load * (length / 2);
+    <div class="form-group">
+        <label for="distanciaCarga">Distancia de la carga puntual desde el inicio de la viga (m):</label>
+        <input type="number" id="distanciaCarga" placeholder="Ej. 2" />
+    </div>
+
+    <div class="form-group">
+        <label for="apoyo">Tipo de Apoyo:</label>
+        <select id="apoyo">
+            <option value="fijo">Fijo</option>
+            <option value="móvil">Móvil</option>
+            <option value="empotrado">Empotrado</option>
+        </select>
+    </div>
+
+    <button onclick="calcular()">Calcular Reacciones y Diagramas</button>
+
+    <div class="chart-container">
+        <canvas id="momentosCanvas"></canvas>
+        <canvas id="cortanteCanvas"></canvas>
+    </div>
+</div>
+
+<script>
+    function calcular() {
+        const vigaLength = parseFloat(document.getElementById('vigaLength').value);
+        const carga = parseFloat(document.getElementById('carga').value);
+        const cargaDistribuida = parseFloat(document.getElementById('cargaDistribuida').value);
+        const distanciaCarga = parseFloat(document.getElementById('distanciaCarga').value);
+        const apoyo = document.getElementById('apoyo').value;
+
+        // Validar datos
+        if (isNaN(vigaLength) || isNaN(carga) || isNaN(cargaDistribuida) || isNaN(distanciaCarga)) {
+            alert("Por favor ingresa valores válidos.");
+            return;
+        }
+
+        // Cálculo de reacciones
+        let reactionA = 0, reactionB = 0;
+        if (apoyo === "fijo") {
+            // Para un apoyo fijo
+            const totalCarga = carga + (cargaDistribuida * vigaLength); // Total carga puntual + distribuida
+            reactionA = (carga * distanciaCarga) / vigaLength + (cargaDistribuida * vigaLength) / 2;
+            reactionB = totalCarga - reactionA;
+        } else if (apoyo === "móvil") {
+            // Apoyo móvil (solo en un extremo)
+            reactionA = carga;
+            reactionB = 0;
+        } else if (apoyo === "empotrado") {
+            // Apoyo empotrado (solo en un extremo)
+            reactionA = carga;
+            reactionB = 0;
+        }
+
+        // Diagramas de momentos y cortantes
+        const momentos = [];
+        const cortantes = [];
+
+        for (let x = 0; x <= vigaLength; x += 0.1) {
+            let momento = 0;
+            let cortante = 0;
+
+            // Cálculo de cortante y momento para cada punto de la viga
+            cortante = reactionA - (cargaDistribuida * x);
+            momento = reactionA * x - (cargaDistribuida * Math.pow(x, 2)) / 2;
+
+            momentos.push(momento);
+            cortantes.push(cortante);
+        }
+
+        // Graficar diagramas con Chart.js
+        graficarDiagramas(momentos, cortantes);
+    }
+
+    function graficarDiagramas(momentos, cortantes) {
+        const ctxMomentos = document.getElementById('momentosCanvas').getContext('2d');
+        const ctxCortante = document.getElementById('cortanteCanvas').getContext('2d');
+
+        new Chart(ctxMomentos, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: momentos.length }, (_, i) => (i * 0.1).toFixed(1)),
+                datasets: [{
+                    label: 'Momento Flector',
+                    data: momentos,
+                    borderColor: 'blue',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Posición en la viga (m)' } },
+                    y: { title: { display: true, text: 'Momento (Nm)' } }
+                }
             }
-
-            // Mostrar las reacciones en consola o en el DOM
-            document.getElementById('result').innerHTML = `
-                <p>Reacción en apoyo 1: ${reaction1.toFixed(2)} kN</p>
-                <p>Reacción en apoyo 2: ${reaction2.toFixed(2)} kN</p>
-            `;
-
-            // Graficar la viga y los momentos
-            const xValues = [...Array(101).keys()].map(i => i * length / 100);
-            const momentValues = xValues.map(x => {
-                return loadType === 'point' ? 
-                    (reaction1 * x - loadValue * (x - position) * (x > position ? 1 : 0)) :
-                    (reaction1 * x - loadValue * x);
-            });
-
-            const layout = {
-                title: 'Diagrama de Momentos',
-                xaxis: { title: 'Posición (m)' },
-                yaxis: { title: 'Momento (kNm)' },
-            };
-
-            Plotly.newPlot('graph', [{
-                x: xValues,
-                y: momentValues,
-                type: 'scatter',
-                mode: 'lines',
-                line: { color: 'blue' },
-            }], layout);
         });
-    </script>
+
+        new Chart(ctxCortante, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: cortantes.length }, (_, i) => (i * 0.1).toFixed(1)),
+                datasets: [{
+                    label: 'Fuerza Cortante',
+                    data: cortantes,
+                    borderColor: 'red',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Posición en la viga (m)' } },
+                    y: { title: { display: true, text: 'Cortante (N)' } }
+                }
+            }
+        });
+    }
+</script>
+
 </body>
 </html>
