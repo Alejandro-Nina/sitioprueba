@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Vigas</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -13,7 +14,7 @@
             background: #f4f4f4;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             padding: 20px;
@@ -36,54 +37,87 @@
         button:hover {
             background-color: #45a049;
         }
+        #grafico {
+            width: 100%;
+            height: 400px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Calculadora de Reacciones y Momentos en Vigas</h2>
+
+        <!-- Entrada de Longitud y Cargas -->
         <label for="l">Longitud de la viga (L):</label>
-        <input type="number" id="l" placeholder="Ingrese la longitud de la viga (m)">
+        <input type="number" id="l" placeholder="Ingrese la longitud de la viga (m)" required>
 
-        <label for="p">Carga distribuida (w):</label>
-        <input type="number" id="w" placeholder="Ingrese la carga distribuida (kN/m)">
+        <label for="cargas">Cargas (Rectangulares y Triangulares):</label>
+        <textarea id="cargas" placeholder="Ingresar cargas (ejemplo: 2, 3, 4, 5)"></textarea>
 
-        <label for="a">Posición del apoyo A (m):</label>
-        <input type="number" id="a" placeholder="Posición del apoyo A (m)">
+        <label for="apoyos">Posiciones de los apoyos:</label>
+        <textarea id="apoyos" placeholder="Posiciones de los apoyos (ejemplo: 0, 5, 10)"></textarea>
 
         <button onclick="calcular()">Calcular</button>
 
         <h3>Resultados:</h3>
         <div id="resultados"></div>
+        
+        <canvas id="grafico"></canvas>
     </div>
 
     <script>
         function calcular() {
             const L = parseFloat(document.getElementById("l").value);
-            const w = parseFloat(document.getElementById("w").value);
-            const a = parseFloat(document.getElementById("a").value);
+            const cargas = document.getElementById("cargas").value.split(',').map(c => parseFloat(c.trim()));
+            const apoyos = document.getElementById("apoyos").value.split(',').map(a => parseFloat(a.trim()));
 
-            if (isNaN(L) || isNaN(w) || isNaN(a)) {
+            if (isNaN(L) || cargas.length === 0 || apoyos.length === 0) {
                 alert("Por favor, ingrese todos los valores.");
                 return;
             }
 
-            // Reacciones en los apoyos
-            const Rb = (w * L * (L - a)) / L;
-            const Ra = w * (L - a) - Rb;
+            // Ejemplo de cálculo de reacciones (simplificado)
+            let Ra = 0, Rb = 0, M = [];
+            cargas.forEach((carga, index) => {
+                // Cálculos simplificados
+                Ra += carga * (L - apoyos[index]) / L;
+                Rb += carga * apoyos[index] / L;
+                M.push(Ra * apoyos[index] - (carga * apoyos[index] * (L - apoyos[index])) / 2);
+            });
 
-            // Cálculo del momento en el centro de la viga
-            const momento = Ra * a - (w * a * (L - a)) / 2;
-
-            // Cortante en el apoyo A
-            const cortanteA = Ra;
-
-            // Mostrar los resultados
             document.getElementById("resultados").innerHTML = `
                 <p>Reacción en A (Ra): ${Ra.toFixed(2)} kN</p>
                 <p>Reacción en B (Rb): ${Rb.toFixed(2)} kN</p>
-                <p>Momento máximo (M): ${momento.toFixed(2)} kN·m</p>
-                <p>Cortante en A: ${cortanteA.toFixed(2)} kN</p>
+                <p>Momentos generados en la viga: ${M.map(m => m.toFixed(2))} kN·m</p>
             `;
+            graficar(L, Ra, Rb, M);
+        }
+
+        function graficar(L, Ra, Rb, momentos) {
+            const ctx = document.getElementById('grafico').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: L}, (_, i) => i),
+                    datasets: [{
+                        label: 'Momento en la viga',
+                        data: momentos, 
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Posición (m)' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Momento (kN·m)' }
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
