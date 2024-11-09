@@ -3,122 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Vigas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Calculadora de Viguenas - Análisis Estructural</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 20px;
+            font-family: Arial, sans-serif;
             background: #f4f4f4;
+            padding: 20px;
         }
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
-        input, button {
+        h1 {
+            text-align: center;
+        }
+        input, select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
+            border: 2px solid #ccc;
             border-radius: 5px;
-            border: 1px solid #ccc;
         }
         button {
             background-color: #4CAF50;
             color: white;
+            padding: 15px;
             border: none;
+            border-radius: 5px;
+            width: 100%;
             cursor: pointer;
         }
         button:hover {
             background-color: #45a049;
         }
-        #grafico {
-            width: 100%;
-            height: 400px;
-        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h2>Calculadora de Reacciones y Momentos en Vigas</h2>
+        <h1>Calculadora de Viguenas - Análisis Estructural</h1>
 
-        <!-- Entrada de Longitud y Cargas -->
-        <label for="l">Longitud de la viga (L):</label>
-        <input type="number" id="l" placeholder="Ingrese la longitud de la viga (m)" required>
+        <label for="apoyo">Seleccione el tipo de apoyo:</label>
+        <select id="apoyo">
+            <option value="empotrado">Empotrado</option>
+            <option value="movil">Móvil</option>
+            <option value="fijo">Fijo</option>
+        </select>
 
-        <label for="cargas">Cargas (Rectangulares y Triangulares):</label>
-        <textarea id="cargas" placeholder="Ingresar cargas (ejemplo: 2, 3, 4, 5)"></textarea>
+        <label for="carga">Carga puntual (en N):</label>
+        <input type="number" id="carga" placeholder="Carga puntual en Newtons">
 
-        <label for="apoyos">Posiciones de los apoyos:</label>
-        <textarea id="apoyos" placeholder="Posiciones de los apoyos (ejemplo: 0, 5, 10)"></textarea>
+        <label for="distancia">Distancia de carga desde el apoyo (en metros):</label>
+        <input type="number" id="distancia" placeholder="Distancia en metros">
 
-        <button onclick="calcular()">Calcular</button>
+        <button onclick="calcular()">Calcular y Graficar</button>
 
-        <h3>Resultados:</h3>
-        <div id="resultados"></div>
-        
-        <canvas id="grafico"></canvas>
+        <div id="grafico"></div>
     </div>
 
     <script>
         function calcular() {
-            const L = parseFloat(document.getElementById("l").value);
-            const cargas = document.getElementById("cargas").value.split(',').map(c => parseFloat(c.trim()));
-            const apoyos = document.getElementById("apoyos").value.split(',').map(a => parseFloat(a.trim()));
+            let apoyo = document.getElementById('apoyo').value;
+            let carga = parseFloat(document.getElementById('carga').value);
+            let distancia = parseFloat(document.getElementById('distancia').value);
 
-            if (isNaN(L) || cargas.length === 0 || apoyos.length === 0) {
-                alert("Por favor, ingrese todos los valores.");
+            if (isNaN(carga) || isNaN(distancia)) {
+                alert('Por favor ingrese valores válidos para la carga y la distancia.');
                 return;
             }
 
-            // Ejemplo de cálculo de reacciones (simplificado)
-            let Ra = 0, Rb = 0, M = [];
-            cargas.forEach((carga, index) => {
-                // Cálculos simplificados
-                Ra += carga * (L - apoyos[index]) / L;
-                Rb += carga * apoyos[index] / L;
-                M.push(Ra * apoyos[index] - (carga * apoyos[index] * (L - apoyos[index])) / 2);
-            });
+            // Reacciones y momentos (simples para ejemplo)
+            let reacciones = [];
+            let momentos = [];
 
-            document.getElementById("resultados").innerHTML = `
-                <p>Reacción en A (Ra): ${Ra.toFixed(2)} kN</p>
-                <p>Reacción en B (Rb): ${Rb.toFixed(2)} kN</p>
-                <p>Momentos generados en la viga: ${M.map(m => m.toFixed(2))} kN·m</p>
-            `;
-            graficar(L, Ra, Rb, M);
-        }
+            if (apoyo == 'empotrado') {
+                reacciones.push(carga); // Reacción empotrado
+                momentos.push(carga * distancia); // Momento en empotrado
+            } else if (apoyo == 'movil') {
+                reacciones.push(carga / 2); // Reacción en apoyo móvil
+                momentos.push((carga * distancia) / 2); // Momento en apoyo móvil
+            } else if (apoyo == 'fijo') {
+                reacciones.push(carga / 2); // Reacción en apoyo fijo
+                momentos.push((carga * distancia) / 2); // Momento en apoyo fijo
+            }
 
-        function graficar(L, Ra, Rb, momentos) {
-            const ctx = document.getElementById('grafico').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({length: L}, (_, i) => i),
-                    datasets: [{
-                        label: 'Momento en la viga',
-                        data: momentos, 
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        fill: false
-                    }]
+            // Graficar resultados
+            let trace1 = {
+                x: [0, distancia],
+                y: [0, reacciones[0]],
+                type: 'scatter',
+                name: 'Reacción',
+                line: {shape: 'spline'}
+            };
+
+            let trace2 = {
+                x: [0, distancia],
+                y: [0, momentos[0]],
+                type: 'scatter',
+                name: 'Momento',
+                line: {shape: 'spline'}
+            };
+
+            let data = [trace1, trace2];
+
+            let layout = {
+                title: 'Diagrama de Reacciones y Momentos',
+                xaxis: {
+                    title: 'Distancia (m)'
                 },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Posición (m)' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Momento (kN·m)' }
-                        }
-                    }
+                yaxis: {
+                    title: 'Fuerza (N) / Momento (Nm)'
                 }
-            });
+            };
+
+            Plotly.newPlot('grafico', data, layout);
         }
     </script>
+
 </body>
 </html>
