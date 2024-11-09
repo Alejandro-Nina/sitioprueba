@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Vigas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Reacciones y Momentos en Vigas</h2>
+        <label for="l">Longitud de la viga (L):</label>
+        <input type="number" id="l" placeholder="Ingrese la longitud de la viga (m)">
+
+        <label for="p">Carga distribuida (w):</label>
+        <input type="number" id="w" placeholder="Ingrese la carga distribuida (kN/m)">
+
+        <label for="a">Posición del apoyo A (m):</label>
+        <input type="number" id="a" placeholder="Posición del apoyo A (m)">
+
+        <button onclick="calcular()">Calcular</button>
+
+        <h3>Resultados:</h3>
+        <div id="resultados"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            const L = parseFloat(document.getElementById("l").value);
+            const w = parseFloat(document.getElementById("w").value);
+            const a = parseFloat(document.getElementById("a").value);
+
+            if (isNaN(L) || isNaN(w) || isNaN(a)) {
+                alert("Por favor, ingrese todos los valores.");
+                return;
+            }
+
+            // Reacciones en los apoyos
+            const Rb = (w * L * (L - a)) / L;
+            const Ra = w * (L - a) - Rb;
+
+            // Cálculo del momento en el centro de la viga
+            const momento = Ra * a - (w * a * (L - a)) / 2;
+
+            // Cortante en el apoyo A
+            const cortanteA = Ra;
+
+            // Mostrar los resultados
+            document.getElementById("resultados").innerHTML = `
+                <p>Reacción en A (Ra): ${Ra.toFixed(2)} kN</p>
+                <p>Reacción en B (Rb): ${Rb.toFixed(2)} kN</p>
+                <p>Momento máximo (M): ${momento.toFixed(2)} kN·m</p>
+                <p>Cortante en A: ${cortanteA.toFixed(2)} kN</p>
+            `;
+        }
+    </script>
+</body>
+</html>
